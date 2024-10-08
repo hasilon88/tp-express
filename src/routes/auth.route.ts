@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/auth:
+ * /api/v1/login:
  *   post:
  *     summary: Authenticate user
  *     description: Authenticates a user based on email and password
@@ -33,15 +33,15 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post('/auth', AuthController.Authenticate);
+router.post('/login', AuthController.Authenticate);
 
 /**
  * @swagger
- * /api/register:
+ * /api/v1/register:
  *   post:
- *     summary: Register new user
- *     description: Creates a new user account with email, password, and name
- *     tags: [Authentication]
+ *     summary: Register a new user
+ *     tags:
+ *       - Authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -51,25 +51,54 @@ router.post('/auth', AuthController.Authenticate);
  *             properties:
  *               name:
  *                 type: string
- *                 description: User's full name
+ *                 example: John Doe
  *               email:
  *                 type: string
  *                 format: email
- *                 description: User's email address
+ *                 example: johndoe@email.com
  *               password:
  *                 type: string
- *                 description: User's password
+ *                 format: password
+ *                 example: password123
+ *               role:
+ *                 type: string
+ *                 enum: [manager, employee]
+ *                 example: employee
  *     responses:
- *       201:
- *         description: Successfully registered new user
+ *       200:
+ *         description: Successful registration with a JWT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 jwt:
+ *                   type: string
+ *                   description: JSON Web Token for authentication
+ *                 message:
+ *                   type: string
+ *                   example: User registered successfully
  *       400:
- *         description: Bad request (e.g., invalid data)
- *       409:
- *         description: Conflict (email already exists)
+ *         description: Invalid input or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Invalid registration details
  *       500:
  *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
  */
 router.post('/register', AuthController.Register);
-
 
 export default router;

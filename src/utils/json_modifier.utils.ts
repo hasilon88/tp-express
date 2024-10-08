@@ -1,4 +1,4 @@
-import fs from 'fs/promises'; // Use the promise-based fs module
+import fs from 'fs/promises';
 import path from 'path';
 
 class JsonModifier {

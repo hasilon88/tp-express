@@ -1,5 +1,4 @@
-
 export default interface AuthenticationDTO {
-    username: string;
+    email: string;
     password: string
 }

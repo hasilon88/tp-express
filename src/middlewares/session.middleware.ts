@@ -1,4 +1,3 @@
-// src/middlewares/session.middleware.ts
 import session from 'express-session';
 import { config } from '../config/config';
 

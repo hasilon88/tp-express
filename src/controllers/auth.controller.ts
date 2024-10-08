@@ -7,7 +7,8 @@ export class AuthController {
             const serviceRes = await AuthService.register({
                 name: req.body.name,
                 password: req.body.password,
-                username: req.body.email,
+                email: req.body.email,
+                role: req.body.role
             });
 
             res.status(serviceRes.code).json({
@@ -22,8 +23,8 @@ export class AuthController {
 
     public static async Authenticate(req: Request, res: Response): Promise<void> {
         try {
-            const serviceRes = await AuthService.authenticate({ password: req.body.password, username: req.body.email });
-
+            const serviceRes = await AuthService.authenticate({ password: req.body.password, email: req.body.email });
+            console.log(serviceRes);
             res.status(serviceRes.code).json({
                 jwt: serviceRes.jwt,
                 message: serviceRes.message
