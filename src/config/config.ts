@@ -4,6 +4,7 @@ import path from 'path';
 dotenv.config();
 
 export const config = {
+  VERSION: String(process.env.VERSION) || 'undefined',
   PORT: Number(process.env.PORT) || 3000,
   CERT_KEY: String(process.env.CERT_KEY_PATH) || 'config/certificates/key.pem',
   CERT_CERT: String(process.env.CERT_CERT_PATH) || 'config/certificates/cert.pem',

@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import https from 'https';
 import fs from 'fs';
 import path from 'path';
 import productRoutes from './routes/product.route';
@@ -12,6 +11,7 @@ import AuthenticationFilter from './middlewares/auth.middleware';
 import { config } from './config/config';
 import getProducts from './utils/init_data_parser.utils';
 import JsonModifier from './utils/json_modifier.utils';
+import { UserService } from './services/user.service';
 
 const filter = new AuthenticationFilter();
 const app = express();
@@ -32,17 +32,17 @@ fs.rmSync(path.resolve(__dirname, config.TEST_LOGS_PATH), {force: true});
 app.use(express.json());
 
 const swaggerOptions = {
-  swaggerDefinition: {
+  definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Harjot\'s API',
-      version: '1.0.0',
+      title: "Harjot's API",
+      version: config.VERSION.toString(),
       description: 'API documentation with JWT authentication',
     },
     servers: [
       {
         url: `https://localhost:${config.PORT}`,
-        description: "Development server (HTTPS)",
+        description: 'Development server (HTTPS)',
       },
     ],
     components: {
@@ -65,7 +65,15 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 
+// Serve the Swagger documentation UI
 app.use(`${config.BASE_PATH}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+// Serve the Swagger documentation in JSON format
+app.get(`${config.BASE_PATH}/docs.json`, (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerDocs);
+});
+
 
 app.get('/', (req: Request, res: Response) => {
   res.send(`
